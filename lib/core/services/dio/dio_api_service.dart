@@ -23,8 +23,7 @@ class DioApiService {
     dio.options.headers = headers;
   }
 
-  Future<ApiResponse> post(
-      {required Map<String, dynamic> body, required var url}) async {
+  Future<ApiResponse> post({dynamic body, required var url}) async {
     try {
       printty(dio.options.baseUrl);
       printty(url);

@@ -1,7 +1,7 @@
 import 'package:cubex/core/core.dart';
 
 class BaseVM extends ChangeNotifier {
-  late ApiResponse apiResponse;
+  final dioService = DioService();
 
   bool _isBusy = false;
   bool get isBusy => _isBusy;
@@ -23,44 +23,37 @@ class BaseVM extends ChangeNotifier {
     notifyListeners();
   }
 
-  reset() {}
-
-  Future<ApiResponse> performApiCall({
-    required String url,
-    required Future<ApiResponse> Function(
-            {dynamic body, bool canRetry, required dynamic url})
-        method,
-    Map<String, dynamic>? body,
-    required ApiResponse Function(Map<String, dynamic> data) onSuccess,
-    ApiResponse Function(String errorMessage)? onError,
+  Future<ApiResponse> makeRequest({
+    required String method,
+    required String endpoint,
+    String? accessToken,
+    Map<String, dynamic>? data,
+    required ApiResponse Function(dynamic) onSuccess,
   }) async {
     try {
       setBusy(true);
-      apiResponse = await method(
-          url: url,
-          body: body,
-          canRetry: true); // Assuming canRetry is always true for simplicity
-
-      if (!apiResponse.success) {
-        setBusy(false);
-        printty(apiResponse.message, logLevel: url.toString());
-        return apiResponse;
-      }
-
-      printty(apiResponse.data, logLevel: url.toString());
-      return onSuccess(apiResponse.data);
-    } catch (e, s) {
-      printty(e, logLevel: url.toString());
-      printty(s.toString());
-      setError(true);
-      if (onError != null) {
-        return onError(e.toString());
-      } else {
-        // Default error handling
-        return ApiResponse(success: false, message: e.toString());
-      }
-    } finally {
+      final response = await dioService.request(
+        method,
+        endpoint,
+        data: data,
+        accessToken: accessToken,
+      );
       setBusy(false);
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        printty(response.data, logLevel: endpoint);
+        return onSuccess(response.data);
+      } else {
+        setError(true);
+        printty('An error else: ${response.data}', logLevel: endpoint);
+        return ApiResponse(success: false, data: response.data);
+      }
+    } catch (e) {
+      setError(true);
+      setBusy(false);
+      printty('An error catch: $e', logLevel: endpoint);
+      return ApiResponse(success: false, message: e.toString());
     }
   }
 }

@@ -10,6 +10,8 @@ class AppRouters {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case RoutePath.registerScreen:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
+      case RoutePath.profileScreen:
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
 
       default:
         return errorScreen('No route defined for ${settings.name}');

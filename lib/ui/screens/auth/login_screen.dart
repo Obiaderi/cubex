@@ -10,28 +10,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _userNameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
   @override
   void initState() {
-    _emailFocusNode.requestFocus();
+    _userNameFocusNode.requestFocus();
     super.initState();
   }
 
   @override
   void dispose() {
-    _emailFocusNode.dispose();
+    _userNameFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginVM>(
+    return Consumer<AuthVM>(
       builder: (context, vm, _) {
         return BusyOverlay(
-          // show: vm.isBusy || context.read<AuthUserVM>().isBusy,
+          show: vm.isBusy,
           child: Scaffold(
             backgroundColor: AppColors.white,
             appBar: AppBar(
@@ -50,18 +50,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const YBox(24),
                   CustomTextField(
-                    labelText: "Email",
-                    focusNode: _emailFocusNode,
+                    labelText: "Username",
+                    focusNode: _userNameFocusNode,
                     showLabelHeader: true,
                     borderRadius: Sizer.height(4),
-                    controller: vm.emailC,
-                    keyboardType: KeyboardType.email,
-                    errorText: vm.emailC.text.isNotEmpty && !vm.isValidEmail
-                        ? "Invalid Email"
-                        : null,
-                    onChanged: (_) => vm.emailIsValid(),
+                    controller: vm.userNameC,
+                    onChanged: (_) => vm.notify(),
                     onSubmitted: (_) {
-                      _emailFocusNode.unfocus();
+                      _userNameFocusNode.unfocus();
                       FocusScope.of(context).requestFocus(_passwordFocusNode);
                     },
                   ),
@@ -128,27 +124,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _login() {
-    // context.read<LoginVM>().login().then((value) {
-    //   if (value.success) {
-    //     context.read<AuthUserVM>().getAuthUser().then((value) {
-    //       if (value.success) {
-    //         Navigator.pushNamed(
-    //           context,
-    //           RoutePath.dashboardNav,
-    //         );
-    //       } else {
-    //         FlushBarToast.fLSnackBar(
-    //           message: value.message.toString(),
-    //           backgroundColor: AppColors.red,
-    //         ).show(context);
-    //       }
-    //     });
-    //   } else {
-    //     FlushBarToast.fLSnackBar(
-    //       message: value.message.toString(),
-    //       backgroundColor: AppColors.red,
-    //     ).show(context);
-    //   }
-    // });
+    context.read<AuthVM>().login().then((value) {
+      if (value.success) {
+        FlushBarToast.fLSnackBar(
+          message: "Login Successful",
+        ).show(context);
+        Navigator.pushReplacementNamed(context, RoutePath.profileScreen);
+      } else {
+        FlushBarToast.fLSnackBar(
+          message: value.message.toString(),
+          backgroundColor: AppColors.red,
+        ).show(context);
+      }
+    });
   }
 }

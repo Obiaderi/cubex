@@ -4,6 +4,6 @@ import 'package:provider/single_child_widget.dart';
 
 final allProviders = <SingleChildWidget>[
   ChangeNotifierProvider(create: (_) => BaseVM()),
-  ChangeNotifierProvider(create: (_) => LoginVM()),
+  ChangeNotifierProvider(create: (_) => AuthVM()),
   ChangeNotifierProvider(create: (_) => RegisterVM()),
 ];

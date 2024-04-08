@@ -31,7 +31,7 @@ class ValidationItemWidget extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: isValid ? AppColors.black12 : AppColors.gray500,
+              color: isValid ? AppColors.brandBlack : AppColors.gray500,
               fontSize: 13.sp,
               fontWeight: FontWeight.w400,
             ),

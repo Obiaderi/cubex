@@ -1,6 +1,7 @@
 import 'package:cubex/core/core.dart';
 
 class RegisterVM extends BaseVM {
+  TextEditingController userNameC = TextEditingController();
   TextEditingController emailC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
   TextEditingController confirmPassC = TextEditingController();
@@ -36,10 +37,33 @@ class RegisterVM extends BaseVM {
   }
 
   signupBtnIsValid() {
-    return isValidEmail && validatorStatus.isValid;
+    return isValidEmail &&
+        validatorStatus.isValid &&
+        userNameC.text.isNotEmpty &&
+        phoneC.text.isNotEmpty &&
+        addressC.text.isNotEmpty;
+  }
+
+  Future<ApiResponse> register() async {
+    return makeRequest(
+      method: DioHttpMethod.POST,
+      endpoint: '/register',
+      data: {
+        "username": userNameC.text.trim(),
+        "email": emailC.text.trim(),
+        "password": passwordC.text.trim(),
+        "phone": phoneC.text.trim(),
+        "address": addressC.text.trim(),
+        "image": imageC.text.trim(),
+      },
+      onSuccess: (data) {
+        return ApiResponse(success: true);
+      },
+    );
   }
 
   clearData() {
+    userNameC.clear();
     emailC.clear();
     passwordC.clear();
     confirmPassC.clear();
@@ -52,6 +76,7 @@ class RegisterVM extends BaseVM {
   void dispose() {
     printty("RegisterVM disposed");
 
+    userNameC.dispose();
     emailC.dispose();
     passwordC.dispose();
     confirmPassC.dispose();

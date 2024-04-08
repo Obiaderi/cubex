@@ -11,6 +11,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<RegisterScreen> {
   final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _userNameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _confirmPasswordFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
@@ -19,12 +20,13 @@ class _LoginScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
-    _emailFocusNode.requestFocus();
+    _userNameFocusNode.requestFocus();
     super.initState();
   }
 
   @override
   void dispose() {
+    _userNameFocusNode.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
@@ -39,7 +41,7 @@ class _LoginScreenState extends State<RegisterScreen> {
     return Consumer<RegisterVM>(
       builder: (context, vm, _) {
         return BusyOverlay(
-          show: false,
+          show: vm.isBusy,
           child: Scaffold(
             backgroundColor: AppColors.white,
             appBar: AppBar(
@@ -56,6 +58,18 @@ class _LoginScreenState extends State<RegisterScreen> {
                   .copyWith(top: Sizer.height(20)),
               child: ListView(
                 children: [
+                  const YBox(24),
+                  CustomTextField(
+                    labelText: "Username",
+                    focusNode: _userNameFocusNode,
+                    showLabelHeader: true,
+                    borderRadius: Sizer.height(4),
+                    controller: vm.userNameC,
+                    onSubmitted: (_) {
+                      _userNameFocusNode.unfocus();
+                      _emailFocusNode.requestFocus();
+                    },
+                  ),
                   const YBox(24),
                   CustomTextField(
                     labelText: "Email",
@@ -81,7 +95,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                     borderRadius: Sizer.height(4),
                     controller: vm.passwordC,
                     isPassword: true,
-                    onChanged: (_) => vm.notify(),
+                    onChanged: (val) => vm.validatePassword(val),
                     onSubmitted: (_) {
                       _passwordFocusNode.unfocus();
                       _confirmPasswordFocusNode.requestFocus();
@@ -90,7 +104,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                   const YBox(24),
                   CustomTextField(
                     labelText: "Confirm Password",
-                    focusNode: _passwordFocusNode,
+                    focusNode: _confirmPasswordFocusNode,
                     showLabelHeader: true,
                     borderRadius: Sizer.height(4),
                     controller: vm.confirmPassC,
@@ -102,7 +116,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                     onChanged: (val) => vm.passwordMatch(val),
                     onSubmitted: (_) {
                       _confirmPasswordFocusNode.unfocus();
-                      _register();
+                      _phoneFocusNode.requestFocus();
                     },
                   ),
                   const YBox(8),
@@ -212,27 +226,20 @@ class _LoginScreenState extends State<RegisterScreen> {
   }
 
   _register() {
-    // context.read<LoginVM>().login().then((value) {
-    //   if (value.success) {
-    //     context.read<AuthUserVM>().getAuthUser().then((value) {
-    //       if (value.success) {
-    //         Navigator.pushNamed(
-    //           context,
-    //           RoutePath.dashboardNav,
-    //         );
-    //       } else {
-    //         FlushBarToast.fLSnackBar(
-    //           message: value.message.toString(),
-    //           backgroundColor: AppColors.red,
-    //         ).show(context);
-    //       }
-    //     });
-    //   } else {
-    //     FlushBarToast.fLSnackBar(
-    //       message: value.message.toString(),
-    //       backgroundColor: AppColors.red,
-    //     ).show(context);
-    //   }
-    // });
+    context.read<RegisterVM>().register().then((value) {
+      if (value.success) {
+        FlushBarToast.fLSnackBar(
+          message: "Registration Successful",
+        ).show(context);
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pushNamed(context, RoutePath.loginScreen);
+        });
+      } else {
+        FlushBarToast.fLSnackBar(
+          message: value.message.toString(),
+          backgroundColor: AppColors.red,
+        ).show(context);
+      }
+    });
   }
 }
