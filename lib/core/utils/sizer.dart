@@ -8,7 +8,7 @@ class Sizer {
   static get deviceRatio => screenHeight / screenWidth;
   static height(double height) => height.h;
   static width(double width) => width.w;
-  static text(double size, {applySizer = true}) => applySizer ? size.sp : size;
+  static text(double size) => size.sp;
   static radius(double size) => size.r;
 }
 

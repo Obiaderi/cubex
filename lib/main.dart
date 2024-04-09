@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              fontFamily: 'Inter',
+              fontFamily: 'Poppins',
               useMaterial3: true,
             ),
             navigatorKey: NavigatorKeys.appNavigatorKey,

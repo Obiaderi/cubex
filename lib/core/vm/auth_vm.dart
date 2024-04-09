@@ -9,6 +9,16 @@ class AuthVM extends BaseVM {
   AuthUser? _authUser;
   AuthUser? get authUser => _authUser;
 
+  String? _passCode;
+  String? get passCode => _passCode;
+
+  setPassCode(String passCode) {
+    _passCode = passCode;
+    notifyListeners();
+  }
+
+  bool get isAuthenticate => _passCode == '1234';
+
   btnIsValid() {
     return userNameC.text.trim().isNotEmpty && passwordC.text.trim().isNotEmpty;
   }
@@ -36,9 +46,18 @@ class AuthVM extends BaseVM {
       onSuccess: (data) {
         printty(data);
         _authUser = authUserFromJson(json.encode(data));
+        StorageService.storeUser(data);
         return ApiResponse(success: true, data: data);
       },
     );
+  }
+
+  getUserFromStorage() async {
+    var user = await StorageService.getUser();
+    if (user != null) {
+      _authUser = authUserFromJson(json.encode(user));
+      notifyListeners();
+    }
   }
 
   logOut() async {

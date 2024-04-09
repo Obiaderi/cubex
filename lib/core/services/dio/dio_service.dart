@@ -1,4 +1,5 @@
 // ignore_for_file: constant_identifier_names
+import 'dart:io';
 
 import 'package:cubex/core/helpers/printty.dart';
 import 'package:dio/dio.dart';
@@ -93,11 +94,14 @@ class DioService {
           throw Exception('Invalid HTTP method');
       }
     } on DioException catch (e) {
+      if (e.error is SocketException) {
+        throw Exception('No internet connection');
+      }
       if (e.response?.statusCode == 409) {
         throw Exception('Username already exists');
       }
       _handleDioError(e);
-      rethrow; // Rethrow the error to be caught by the caller
+      rethrow;
     }
   }
 

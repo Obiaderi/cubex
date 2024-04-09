@@ -54,7 +54,9 @@ class _LoginScreenState extends State<RegisterScreen> {
               automaticallyImplyLeading: false,
               title: Text(
                 "Register Screen",
-                style: AppTypography.text16b,
+                style: AppTypography.text18.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             body: Container(

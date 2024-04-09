@@ -13,6 +13,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _userNameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
+  _unFocusAll() {
+    _userNameFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+  }
+
   @override
   void dispose() {
     _userNameFocusNode.dispose();
@@ -32,9 +37,12 @@ class _LoginScreenState extends State<LoginScreen> {
               backgroundColor: AppColors.white,
               elevation: 0,
               automaticallyImplyLeading: false,
+              centerTitle: true,
               title: Text(
                 "Login Screen",
-                style: AppTypography.text16b,
+                style: AppTypography.text18.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             body: Container(
@@ -74,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomButton(
                     height: 65,
                     onTap: () {
+                      _unFocusAll();
                       _login();
                     },
                     online: vm.btnIsValid(),

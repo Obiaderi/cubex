@@ -6,6 +6,8 @@ class AppRouters {
     switch (settings.name) {
       case RoutePath.splashScreen:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case RoutePath.welcomeBack:
+        return MaterialPageRoute(builder: (_) => const WelcomneBackScreen());
       case RoutePath.loginScreen:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case RoutePath.registerScreen:

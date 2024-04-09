@@ -1,4 +1,5 @@
 import 'package:cubex/core/core.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,6 +14,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthVM>().getUserFromStorage();
+    });
     _animateOpacity();
   }
 
@@ -22,8 +26,13 @@ class _SplashScreenState extends State<SplashScreen> {
       _opacity = 1.0;
     });
 
-    await Future.delayed(const Duration(seconds: 3));
-    Navigator.of(context).pushReplacementNamed(RoutePath.loginScreen);
+    Future.delayed(const Duration(seconds: 4)).then((value) {
+      if (context.read<AuthVM>().authUser != null) {
+        Navigator.of(context).pushReplacementNamed(RoutePath.welcomeBack);
+      } else {
+        Navigator.of(context).pushReplacementNamed(RoutePath.loginScreen);
+      }
+    });
   }
 
   @override
@@ -33,11 +42,12 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: AnimatedOpacity(
           opacity: _opacity,
-          duration: const Duration(seconds: 4),
-          child: Text(
+          duration: const Duration(seconds: 3),
+          child: const Text(
             'Welcome to Cubex',
-            style: AppTypography.text32.copyWith(
+            style: TextStyle(
               color: AppColors.white,
+              fontSize: 30,
               fontWeight: FontWeight.w700,
             ),
           ),

@@ -29,9 +29,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             backgroundColor: AppColors.white,
             elevation: 0,
             automaticallyImplyLeading: false,
+            centerTitle: true,
             title: Text(
               "Profile Screen",
-              style: AppTypography.text16b,
+              style: AppTypography.text18.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           body: Container(
@@ -54,8 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                "https://img.fpik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?w=1060&t=st=1712611710~exp=1712612310~hmac=54df4dd2df8b201272342edd6e4265a8b68328bc8778d322909e127896f5e552",
+                            imageUrl: vm.authUser?.image ?? "",
                             imageBuilder: (context, imageProvider) => Container(
                               width: Sizer.width(100),
                               height: Sizer.width(100),
@@ -142,6 +144,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const YBox(80),
                   InkWell(
+                    splashColor: AppColors.transparent,
+                    highlightColor: AppColors.transparent,
                     onTap: () {
                       BsWrapper.showCustomDialog(
                         context,

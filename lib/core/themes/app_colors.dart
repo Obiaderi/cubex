@@ -29,6 +29,8 @@ class AppColors {
   static const lightBlue = Color(0xFF2978D6);
   static const darkBlue100 = Color(0xFF334F98);
   static const sheetLightBlue = Color(0xFF8AD0EF);
+  static const numPad = Color(0xFFECEFF9);
+  static const numPad2 = Color(0xFFE8F6FC);
 
   static const primaryLightBlue = Color(0xFFD8E4FF);
   static const gray700 = Color(0xFF4F4D55);
