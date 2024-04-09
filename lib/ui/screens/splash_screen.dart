@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
             'Welcome to Cubex',
             style: TextStyle(
               color: AppColors.white,
-              fontSize: 30,
+              fontSize: 34,
               fontWeight: FontWeight.w700,
             ),
           ),
