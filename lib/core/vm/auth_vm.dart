@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:cubex/core/core.dart';
 
 class AuthVM extends BaseVM {
-  TextEditingController userNameC = TextEditingController(text: 'lorem');
-  TextEditingController passwordC = TextEditingController(text: 'password');
+  TextEditingController userNameC = TextEditingController();
+  TextEditingController passwordC = TextEditingController();
 
   AuthUser? _authUser;
   AuthUser? get authUser => _authUser;

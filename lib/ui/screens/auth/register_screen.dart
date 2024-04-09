@@ -18,10 +18,14 @@ class _LoginScreenState extends State<RegisterScreen> {
   final FocusNode _addressFocusNode = FocusNode();
   final FocusNode _imageFocusNode = FocusNode();
 
-  @override
-  void initState() {
-    _userNameFocusNode.requestFocus();
-    super.initState();
+  _unFocusAll() {
+    _userNameFocusNode.unfocus();
+    _emailFocusNode.unfocus();
+    _passwordFocusNode.unfocus();
+    _confirmPasswordFocusNode.unfocus();
+    _phoneFocusNode.unfocus();
+    _addressFocusNode.unfocus();
+    _imageFocusNode.unfocus();
   }
 
   @override
@@ -174,7 +178,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                     borderRadius: Sizer.height(4),
                     controller: vm.imageC,
                     onSubmitted: (_) {
-                      _imageFocusNode.unfocus();
+                      _unFocusAll();
                       _register();
                     },
                   ),
@@ -182,6 +186,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                   CustomButton(
                     height: 65,
                     onTap: () {
+                      _unFocusAll();
                       _register();
                     },
                     online: vm.signupBtnIsValid(),
