@@ -71,6 +71,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                     showLabelHeader: true,
                     borderRadius: Sizer.height(4),
                     controller: vm.userNameC,
+                    onChanged: (_) => vm.notify(),
                     onSubmitted: (_) {
                       _userNameFocusNode.unfocus();
                       _emailFocusNode.requestFocus();
@@ -154,7 +155,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                     showLabelHeader: true,
                     borderRadius: Sizer.height(4),
                     controller: vm.phoneC,
-                    onChanged: (_) => vm.emailIsValid(),
+                    onChanged: (_) => vm.notify(),
                     onSubmitted: (_) {
                       _phoneFocusNode.unfocus();
                       _addressFocusNode.requestFocus();
@@ -167,6 +168,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                     showLabelHeader: true,
                     borderRadius: Sizer.height(4),
                     controller: vm.addressC,
+                    onChanged: (_) => vm.notify(),
                     onSubmitted: (_) {
                       _addressFocusNode.unfocus();
                       _imageFocusNode.requestFocus();
@@ -179,6 +181,7 @@ class _LoginScreenState extends State<RegisterScreen> {
                     showLabelHeader: true,
                     borderRadius: Sizer.height(4),
                     controller: vm.imageC,
+                    onChanged: (_) => vm.notify(),
                     onSubmitted: (_) {
                       _unFocusAll();
                       _register();
@@ -233,8 +236,10 @@ class _LoginScreenState extends State<RegisterScreen> {
   }
 
   _register() {
-    context.read<RegisterVM>().register().then((value) {
+    var regVm = context.read<RegisterVM>();
+    regVm.register().then((value) {
       if (value.success) {
+        regVm.clearData();
         FlushBarToast.fLSnackBar(
           message: "Registration Successful",
         ).show(context);

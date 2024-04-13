@@ -121,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CustomListTile(
                             title: "Username",
-                            subtitle: vm.authUser?.username ?? "",
+                            subtitle: vm.authUser?.username?.capitalize() ?? "",
                           ),
                           const Divider(),
                           CustomListTile(
